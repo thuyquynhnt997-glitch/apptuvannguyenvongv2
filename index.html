@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Tư vấn Nguyện vọng V2 (Google Maps)</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Sử dụng font Inter cho toàn bộ trang */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Tùy chỉnh thanh cuộn (cho Firefox) */
+        select {
+            scrollbar-width: thin;
+            scrollbar-color: #9CA3AF #F3F4F6;
+        }
+        /* Tùy chỉnh thanh cuộn (cho Chrome, Safari, Edge) */
+        select::-webkit-scrollbar {
+            width: 8px;
+        }
+        select::-webkit-scrollbar-track {
+            background: #F3F4F6;
+            border-radius: 10px;
+        }
+        select::-webkit-scrollbar-thumb {
+            background-color: #9CA3AF;
+            border-radius: 10px;
+            border: 2px solid #F3F4F6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-lg bg-white rounded-2xl shadow-xl p-6 md:p-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-center text-blue-700 mb-2">
+            Tư vấn Nguyện vọng Lớp 10 (TP.HCM 2025)
+        </h1>
+        <p class="text-center text-gray-600 mb-6">
+            Nhập thông tin, điểm và địa chỉ nhà để nhận tư vấn đầy đủ.
+        </p>
+
+        <!-- Form nhập điểm -->
+        <form id="diemForm" class="space-y-4">
+
+            <!-- Các trường thông tin học sinh -->
+            <div>
+                <label for="hoTen" class="block text-sm font-medium text-gray-700 mb-1">Họ và tên học sinh</label>
+                <input type="text" id="hoTen" name="hoTen" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="Ví dụ: Nguyễn Văn A">
+            </div>
+            
+            <div>
+                <label for="truongTHCS" class="block text-sm font-medium text-gray-700 mb-1">Trường THCS (đang học)</label>
+                <input type="text" id="truongTHCS" name="truongTHCS" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="Ví dụ: THCS Lê Quý Đôn, Q.3">
+            </div>
+
+            <!-- [THÊM MỚI] Địa chỉ nhà -->
+            <div>
+                <label for="diaChiNha" class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ nhà (để tra cứu đường đi)</label>
+                <input type="text" id="diaChiNha" name="diaChiNha" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="Ví dụ: 200 Pasteur, P.6, Q.3, TPHCM">
+            </div>
+
+            <div>
+                <label for="diemTB_HK2" class="block text-sm font-medium text-gray-700 mb-1">Điểm trung bình HK2 (lớp 9)</label>
+                <input type="number" id="diemTB_HK2" name="diemTB_HK2" min="0" max="10" step="0.01" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="Điểm tổng kết trong học bạ">
+            </div>
+            
+            <hr class="pt-2"/>
+
+            <!-- Các trường nhập điểm thi -->
+            <div>
+                <label for="toan" class="block text-sm font-medium text-gray-700 mb-1">Điểm Toán (dự kiến)</label>
+                <input type="number" id="toan" name="toan" min="0" max="10" step="0.25" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <div>
+                <label for="van" class="block text-sm font-medium text-gray-700 mb-1">Điểm Văn (dự kiến)</label>
+                <input type="number" id="van" name="van" min="0" max="10" step="0.25" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <div>
+                <label for="anh" class="block text-sm font-medium text-gray-700 mb-1">Điểm Anh (dự kiến)</label>
+                <input type="number" id="anh" name="anh" min="0" max="10" step="0.25" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <div>
+                <label for="nguyenVong" class="block text-sm font-medium text-gray-700 mb-1">Chọn Nguyện Vọng (Trường)</label>
+                <select id="nguyenVong" name="nguyenVong" required size="7"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <!-- Các tùy chọn sẽ được thêm bằng JS -->
+                </select>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button type="submit"
+                        class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200">
+                    Xem Kết Quả & Tư Vấn
+                </button>
+                
+                <button type="button" id="resetButton"
+                        class="w-full bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-lg shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-all duration-200">
+                    Nhập lại
+                </button>
+            </div>
+        </form>
+
+        <!-- Khu vực hiển thị kết quả -->
+        <div id="ketQua" class="mt-6 p-5 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg hidden">
+            <!-- Nội dung kết quả sẽ được chèn vào đây -->
+        </div>
+
+        <p class="text-xs text-gray-500 text-center mt-4">
+            *Lưu ý: Dữ liệu điểm chuẩn (NV1) 2025-2026. Ứng dụng chỉ mang tính chất tham khảo.
+        </p>
+
+    </div>
+
+    <script>
+        // --- [CẬP NHẬT] DỮ LIỆU ĐIỂM CHUẨN VÀ ĐỊA CHỈ (NV1) 2025-2026 ---
+        const TRUONG_DATA = [
+            // Top đầu
+            { ten: "THCS-THPT Trần Đại Nghĩa", diem: 24.5, diaChi: "Lô P2, Khu đô thị mới, P. An Khánh, Thành phố Thủ Đức, TPHCM" },
+            { ten: "Nguyễn Thị Minh Khai", diem: 23.75, diaChi: "275 Đ. Điện Biên Phủ, Phường 7, Quận 3, TPHCM" },
+            { ten: "Nguyễn Thượng Hiền", diem: 23.5, diaChi: "544 Đ. Cách Mạng Tháng 8, Phường 4, Tân Bình, TPHCM" },
+            { ten: "Nguyễn Hữu Huân", diem: 23.5, diaChi: "1 Đ. Dân Chủ, Bình Thọ, Thủ Đức, TPHCM" },
+            { ten: "Trung học Thực hành ĐH Sư phạm", diem: 23, diaChi: "222 Lê Văn Sỹ, Phường 14, Quận 3, TPHCM" },
+            { ten: "Nguyễn Hữu Cầu", diem: 23, diaChi: "Nguyễn Ảnh Thủ, Trung Chánh, Hóc Môn, TPHCM" },
+            { ten: "Trần Phú", diem: 22.75, diaChi: "18 Lê Thúc Hoạch, Phú Thọ Hoà, Tân Phú, TPHCM" },
+            { ten: "Phú Nhuận", diem: 22.5, diaChi: "5 Hoàng Minh Giám, Phường 9, Phú Nhuận, TPHCM" },
+            { ten: "Bùi Thị Xuân", diem: 22.25, diaChi: "73 Bùi Thị Xuân, Phường Phạm Ngũ Lão, Quận 1, TPHCM" },
+            { ten: "Lê Quý Đôn", diem: 22.25, diaChi: "110 Nguyễn Thị Minh Khai, Phường 6, Quận 3, TPHCM" },
+            { ten: "Mạc Đĩnh Chi", diem: 22.25, diaChi: "4 Tân Hưng, Phường 12, Quận 5, TPHCM" },
+            { ten: "Tây Thạnh", diem: 21.75, diaChi: "98/39 Tây Thạnh, Tây Thạnh, Tân Phú, TPHCM" },
+            { ten: "Võ Trường Toản", diem: 21.5, diaChi: "11 Nguyễn Bỉnh Khiêm, Bến Nghé, Quận 1, TPHCM" },
+            { ten: "Trung học thực hành Sài Gòn", diem: 21.5, diaChi: "220 Đ. Trần Bình Trọng, Phường 4, Quận 5, TPHCM" },
+            { ten: "Trần Khai Nguyên", diem: 21, diaChi: "225 Đ. Nguyễn Tri Phương, Phường 9, Quận 5, TPHCM" },
+            { ten: "Thủ Đức", diem: 21, diaChi: "166/5 Võ Văn Ngân, Bình Thọ, Thủ Đức, TPHCM" },
+            { ten: "Lương Thế Vinh", diem: 20.75, diaChi: "131D Nguyễn Văn Hưởng, Thảo Điền, Thủ Đức, TPHCM" },
+            
+            // Thêm các trường khác (chưa có địa chỉ)
+            { ten: "Bình Phú", diem: 20.25, diaChi: "" },
+            { ten: "Trần Hưng Đạo", diem: 20.25, diaChi: "" },
+            { ten: "Lý Thường Kiệt", diem: 20.25, diaChi: "" },
+            { ten: "Trưng Vương", diem: 20.25, diaChi: "" },
+            { ten: "Ngô Quyền", diem: 20, diaChi: "" },
+            { ten: "Nguyễn Công Trứ", diem: 20, diaChi: "" },
+            { ten: "Marie Curie", diem: 19.5, diaChi: "" },
+            { ten: "Bà Điểm", diem: 19, diaChi: "" },
+            { ten: "Gia Định", diem: 18.75, diaChi: "" },
+            { ten: "Nguyễn Khuyến", diem: 18.75, diaChi: "" },
+            { ten: "Nguyễn Du", diem: 18.75, diaChi: "" },
+            { ten: "Ernst Thälmann", diem: 18, diaChi: "" },
+            { ten: "Hùng Vương", diem: 17.75, diaChi: "" },
+            { ten: "Võ Thị Sáu", diem: 17.75, diaChi: "" },
+            { ten: "Giồng Ông Tố", diem: 17.5, diaChi: "" },
+            { ten: "Lê Thánh Tôn", diem: 17.25, diaChi: "" },
+            { ten: "Trường Chinh", diem: 17.25, diaChi: "" },
+            { ten: "Nguyễn Trung Trực", diem: 17.25, diaChi: "" },
+            { ten: "Nguyễn Tất Thành", diem: 16.75, diaChi: "" },
+            { ten: "Hoàng Hoa Thám", diem: 16.75, diaChi: "" },
+            { ten: "Nguyễn Hiền", diem: 16.25, diaChi: "" },
+            { ten: "Phước Long", diem: 16.25, diaChi: "" },
+            { ten: "Trần Quang Khải", diem: 16, diaChi: "" },
+            { ten: "Gò Vấp", diem: 15.75, diaChi: "" },
+            { ten: "Thạnh Lộc", diem: 15.5, diaChi: "" },
+            { ten: "Tạ Quang Bửu", diem: 15, diaChi: "" },
+            { ten: "Võ Văn Kiệt", diem: 15, diaChi: "" },
+            { ten: "Nguyễn Huệ", diem: 15, diaChi: "" },
+            { ten: "Trần Văn Giàu", diem: 14.75, diaChi: "" },
+            { ten: "Nguyễn Hữu Thọ", diem: 14, diaChi: "" },
+            { ten: "Phạm Phú Thứ", diem: 14.25, diaChi: "" },
+            { ten: "Tân Phong", diem: 13.75, diaChi: "" },
+            { ten: "Nguyễn An Ninh", diem: 13.75, diaChi: "" },
+            { ten: "Nam Kỳ Khởi Nghĩa", diem: 13.75, diaChi: "" },
+            { ten: "Thanh Đa", diem: 13.75, diaChi: "" },
+            { ten: "Dương Văn Thì", diem: 13.5, diaChi: "" },
+            { ten: "Phan Đăng Lưu", diem: 13.5, diaChi: "" },
+            { ten: "Hàn Thuyên", diem: 13.5, diaChi: "" },
+            { ten: "Thủ Thiêm", diem: 12.5, diaChi: "" },
+            { ten: "Trần Hữu Trang", diem: 12.5, diaChi: "" },
+            { ten: "THPT chuyên Năng khiếu TDTT Nguyễn Thị Định", diem: 12.5, diaChi: "" },
+            { ten: "Lương Văn Can", diem: 12.25, diaChi: "" },
+            { ten: "Lê Thị Hồng Gấm", diem: 12, diaChi: "" },
+            { ten: "Năng khiếu TDTT (Q1)", diem: 11.75, diaChi: "" },
+            { ten: "THCS và THPT Diên Hồng", diem: 11.75, diaChi: "" },
+            { ten: "Nguyễn Trãi (Q4)", diem: 11.25, diaChi: "" },
+            { ten: "THCS và THPT Sương Nguyệt Anh", diem: 11.25, diaChi: "" },
+            { ten: "Nguyễn Thị Diệu", diem: 10.5, diaChi: "" },
+            { ten: "Ngô Gia Tự", diem: 10.5, diaChi: "" },
+            { ten: "Nguyễn Văn Linh", diem: 10.5, diaChi: "" },
+            { ten: "Long Trường", diem: 10.5, diaChi: "" },
+            { ten: "Nguyễn Văn Tăng", diem: 10.5, diaChi: "" },
+            { ten: "Bình Hưng Hòa", diem: 10.5, diaChi: "" },
+            { ten: "Bình Tân", diem: 10.5, diaChi: "" },
+            { ten: "Hiệp Bình", diem: 10.5, diaChi: "" },
+            { ten: "Linh Trung", diem: 10.5, diaChi: "" },
+            { ten: "Tân Túc", diem: 10.5, diaChi: "" },
+            { ten: "Đa Phước", diem: 10.5, diaChi: "" },
+            { ten: "Cần Thạnh", diem: 10.5, diaChi: "" },
+            { ten: "An Nghĩa", diem: 10.5, diaChi: "" },
+            { ten: "Bình Khánh", diem: 10.5, diaChi: "" },
+            { ten: "An Lạc", diem: 10.5, diaChi: "" },
+            { ten: "Nguyễn Thái Bình", diem: 15, diaChi: "" },
+            { ten: "Tân Bình", diem: 16.25, diaChi: "" },
+            { ten: "Nguyễn Chí Thanh", diem: 17, diaChi: "" },
+            { ten: "Bình Thạnh", diem: 10.5, diaChi: "" },
+            { ten: "Đào Sơn Tây", diem: 10.5, diaChi: "" },
+            { ten: "Tam Phú", diem: 10.5, diaChi: "" },
+            { ten: "Lê Trọng Tấn", diem: 17.5, diaChi: "" },
+            { ten: "Phạm Văn Sáng", diem: 10.5, diaChi: "" },
+            { ten: "Vĩnh Lộc B", diem: 10.5, diaChi: "" },
+            { ten: "Bình Chánh", diem: 10.5, diaChi: "" },
+            { ten: "Lê Minh Xuân", diem: 10.5, diaChi: "" },
+            { ten: "Phong Phú", diem: 10.5, diaChi: "" },
+            { ten: "Thạnh An", diem: 10.5, diaChi: "" },
+            { ten: "Củ Chi", diem: 10.5, diaChi: "" },
+            { ten: "An Nhơn Tây", diem: 10.5, diaChi: "" },
+            { ten: "Trung Lập", diem: 10.5, diaChi: "" },
+            { ten: "Phú Hòa", diem: 10.5, diaChi: "" },
+            { ten: "Trung Phú", diem: 10.5, diaChi: "" },
+            { ten: "Quang Trung", diem: 10.5, diaChi: "" },
+            { ten: "Tân Thông Hội", diem: 10.5, diaChi: "" }
+        ];
+        // --- KẾT THÚC DỮ LIỆU ---
+
+        // Hàm gửi dữ liệu đến Google Sheets
+        function sendToGoogleSheets(data) {
+            
+            // [ĐÃ SỬA LỖI] Đây là URL Google Script của bạn, đã được đặt trong dấu ngoặc đơn.
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzosfNx9Nk5-kNnnnKFWELLgI7zhjvp6ste7Y3JyUiKvF69XUGmujrylr0egwOsKWFR/exec'; 
+
+            // [ĐÃ SỬA LỖI] Khôi phục lại điều kiện "if" ban đầu.
+            // Điều kiện này sẽ là 'false' vì bạn đã dán URL của mình,
+            // và code sẽ tiếp tục chạy để gửi dữ liệu.
+            if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                console.warn('Bạn chưa cập nhật SCRIPT_URL để gửi dữ liệu đến Google Sheets.');
+                const warning = document.createElement('p');
+                warning.className = 'text-red-600 text-xs italic mt-3';
+                warning.textContent = '(*Lỗi cấu hình: Chưa kết nối Google Sheets. Dữ liệu chưa được lưu.)';
+                document.getElementById('ketQua').appendChild(warning);
+                return;
+            }
+            
+            const formData = new FormData();
+            for (const key in data) {
+                formData.append(key, data[key]);
+            }
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors' 
+            })
+            .then(response => {
+                console.log('Đã gửi dữ liệu báo cáo đến Google Sheets.');
+            })
+            .catch(error => {
+                console.error('Lỗi khi gửi dữ liệu (có thể do no-cors, thường là bỏ qua):', error);
+            });
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('diemForm');
+            const selectTruong = document.getElementById('nguyenVong');
+            const ketQuaDiv = document.getElementById('ketQua');
+            const resetButton = document.getElementById('resetButton');
+
+            // 1. Tải danh sách trường vào thẻ <select> (sắp xếp theo tên)
+            TRUONG_DATA.sort((a, b) => a.ten.localeCompare(b.ten));
+            
+            TRUONG_DATA.forEach(truong => {
+                const option = document.createElement('option');
+                option.value = truong.diem;
+                // [MỚI] Lưu địa chỉ vào dataset
+                option.dataset.address = truong.diaChi || ''; 
+                option.textContent = truong.ten;
+                selectTruong.appendChild(option);
+            });
+            selectTruong.selectedIndex = 0;
+
+            // 2. Xử lý sự kiện khi nộp form
+            form.addEventListener('submit', (e) => {
+                e.preventDefault(); 
+
+                // Lấy giá trị điểm thi
+                const toan = parseFloat(document.getElementById('toan').value);
+                const van = parseFloat(document.getElementById('van').value);
+                const anh = parseFloat(document.getElementById('anh').value);
+                
+                // Lấy thông tin học sinh
+                const hoTen = document.getElementById('hoTen').value;
+                const truongTHCS = document.getElementById('truongTHCS').value;
+                // [MỚI] Lấy địa chỉ nhà
+                const diaChiNha = document.getElementById('diaChiNha').value;
+                
+                // Lấy điểm học bạ
+                const diemTB_HK2 = parseFloat(document.getElementById('diemTB_HK2').value);
+
+                // Lấy thông tin trường
+                const selectedOption = selectTruong.options[selectTruong.selectedIndex];
+                
+                if (selectTruong.selectedIndex < 0) {
+                     ketQuaDiv.innerHTML = `<p class="font-bold text-red-600">Vui lòng chọn một trường từ danh sách.</p>`;
+                    ketQuaDiv.classList.remove('hidden');
+                    return;
+                }
+                
+                const tenTruong = selectedOption.text;
+                const diemChuan = parseFloat(selectedOption.value);
+                // [MỚI] Lấy địa chỉ trường từ dataset
+                const diaChiTruong = selectedOption.dataset.address;
+
+                // Cập nhật validation (thêm diaChiNha)
+                if (isNaN(toan) || isNaN(van) || isNaN(anh) || isNaN(diemTB_HK2) || !diaChiNha ||
+                    toan < 0 || toan > 10 || van < 0 || van > 10 || anh < 0 || anh > 10 || diemTB_HK2 < 0 || diemTB_HK2 > 10) {
+                    ketQuaDiv.innerHTML = `<p class="font-bold text-red-600">Vui lòng nhập điểm hợp lệ (từ 0 đến 10) và điền đầy đủ địa chỉ nhà.</p>`;
+                    ketQuaDiv.classList.remove('hidden');
+                    return;
+                }
+
+                // Tính toán
+                const tongDiem = toan + van + anh;
+                const diemTB_Thi = tongDiem / 3;
+                const chenhLech = tongDiem - diemChuan;
+
+                // Logic cảnh báo học bạ
+                let canhBaoHocBaHTML = '';
+                let canhBaoText = ''; 
+                const chenhLech_HocBa = diemTB_Thi - diemTB_HK2;
+
+                if (chenhLech_HocBa >= 1.5) {
+                    canhBaoText = `CẢNH BÁO: ĐIỂM THI DỰ KIẾN CỦA BẠN (${diemTB_Thi.toFixed(2)}) CAO HƠN ĐIỂM TRUNG BÌNH HỌC KỲ 2 (${diemTB_HK2.toFixed(2)}) TỚI ${chenhLech_HocBa.toFixed(2)} ĐIỂM. ĐÂY LÀ MỘT MỨC CHÊNH LỆCH RẤT LỚN. BẠN CẦN XEM XÉT LẠI KHẢ NĂNG THỰC TẾ CỦA MÌNH ĐỂ TRÁNH CHỌN NGUYỆN VỌNG QUÁ SỨC.`;
+                    canhBaoHocBaHTML = `
+                        <div class="p-4 bg-red-100 border-l-4 border-red-500 rounded-r-lg mb-4 text-red-700">
+                            <p class="font-bold text-base">${canhBaoText}</p>
+                        </div>
+                    `;
+                }
+
+                // Logic lời khuyên nguyện vọng
+                let loiKhuyen = '';
+                let mauSac = 'text-gray-800'; 
+
+                if (chenhLech < -2) {
+                    mauSac = 'text-red-700';
+                    loiKhuyen = `<strong>Lời khuyên Nguyện vọng:</strong> Điểm tổng của bạn thấp hơn điểm chuẩn của trường <strong>${tenTruong}</strong> tới ${Math.abs(chenhLech).toFixed(2)} điểm. Đây là mức chênh lệch khá lớn, khả năng trúng tuyển thấp. Bạn nên cân nhắc các nguyện vọng/trường khác an toàn và phù hợp hơn với điểm số của mình.`;
+                } else if (chenhLech > 3) {
+                    mauSac = 'text-green-700';
+                    loiKhuyen = `<strong>Lời khuyên Nguyện vọng:</strong> Điểm tổng của bạn vượt điểm chuẩn của trường <strong>${tenTruong}</strong> tới ${chenhLech.toFixed(2)} điểm. Đây là một lựa chọn rất an toàn! Chúc mừng bạn, bạn có thể tự tin đăng ký trường này làm nguyện vọng 1.`;
+                } else if (chenhLech >= -2 && chenhLech <= 0) {
+                    mauSac = 'text-yellow-700';
+                    loiKhuyen = `<strong>Lời khuyên Nguyện vọng:</strong> Điểm tổng của bạn thấp hơn hoặc bằng điểm chuẩn của trường <strong>${tenTruong}</strong> một chút (${Math.abs(chenhLech).toFixed(2)} điểm). Đây là một lựa chọn có rủi ro, bạn nên cân nhắc kỹ và chuẩn bị các nguyện vọng 2, 3 an toàn hơn.`;
+                } else { 
+                    mauSac = 'text-blue-700';
+                    loiKhuyen = `<strong>Lời khuyên Nguyện vọng:</strong> Điểm tổng của bạn cao hơn điểm chuẩn của trường <strong>${tenTruong}</strong> (${chenhLech.toFixed(2)} điểm). Đây là một lựa chọn khá tốt và có khả năng trúng tuyển.`;
+                }
+                
+                // [LOGIC MỚI] Tạo link Google Maps và Lời khuyên khoảng cách
+                let loiKhuyenKhoangCachHTML = '';
+                
+                if (!diaChiTruong) {
+                    // Nếu trường chưa được cập nhật địa chỉ
+                    loiKhuyenKhoangCachHTML = `
+                        <div class="mt-4 p-3 bg-gray-100 rounded-lg">
+                            <p class="text-sm text-gray-700">Không thể tìm thấy địa chỉ của trường <strong>${tenTruong}</strong> trong cơ sở dữ liệu để tạo link tự động.</p>
+                        </div>
+                    `;
+                } else {
+                    // Tạo link và lời khuyên
+                    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(diaChiNha)}&destination=${encodeURIComponent(diaChiTruong)}`;
+                    
+                    loiKhuyenKhoangCachHTML = `
+                        <div class="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg">
+                            <a href="${googleMapsUrl}" target="_blank" 
+                               class="block text-center w-full p-2 bg-yellow-400 text-yellow-900 font-bold rounded-lg hover:bg-yellow-500 transition-all">
+                               NHẤN VÀO ĐÂY ĐỂ XEM ĐOẠN ĐƯỜNG TRÊN GOOGLE MAPS
+                            </a>
+                            <p class="mt-3 text-sm text-yellow-800">
+                                <strong>Lưu ý về đi lại:</strong> Hãy nhấp vào link trên để kiểm tra khoảng cách và thời gian đi lại. 
+                                <span class="font-bold">NẾU ĐOẠN ĐƯỜNG XA HƠN 10-15KM</span>, bạn cần cân nhắc kỹ về việc đi lại vất vả, có thể ảnh hưởng đến sức khoẻ và kết quả học tập.
+                            </p>
+                        </div>
+                    `;
+                }
+
+
+                // Hiển thị kết quả
+                ketQuaDiv.innerHTML = `
+                    ${canhBaoHocBaHTML}
+                    <h3 class="text-lg font-bold mb-3">Kết quả Phân tích (cho ${hoTen})</h3>
+                    <div class="space-y-2 text-sm">
+                        <p>Điểm TB Học kỳ 2: <strong class="text-xl">${diemTB_HK2.toFixed(2)}</strong></p>
+                        <p>Điểm TB 3 môn thi (dự kiến): <strong class="text-xl">${diemTB_Thi.toFixed(2)}</strong></p>
+                        <p>Tổng điểm thi (dự kiến): <strong class="text-xl">${tongDiem.toFixed(2)}</strong></p>
+                        <hr class="my-2">
+                        <p>Trường đã chọn: <strong>${tenTruong}</strong></p>
+                        <p>Điểm chuẩn (NV1 - 2025): <strong class="text-xl">${diemChuan.toFixed(2)}</strong></p>
+                        <p>Chênh lệch (Thi - Chuẩn): <strong class="text-xl ${mauSac}">${chenhLech > 0 ? '+' : ''}${chenhLech.toFixed(2)}</strong></p>
+                        <hr class="my-2">
+                        <p class="${mauSac}">${loiKhuyen}</p>
+                    </div>
+                    
+                    <!-- [MỚI] Thêm khối lời khuyên khoảng cách -->
+                    ${loiKhuyenKhoangCachHTML}
+                `;
+
+                ketQuaDiv.classList.remove('hidden');
+                ketQuaDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                
+                // [CẬP NHẬT] Gửi dữ liệu đi để báo cáo
+                const reportData = {
+                    hoTen: hoTen,
+                    truongTHCS: truongTHCS,
+                    diaChiNha: diaChiNha, // Thêm trường mới
+                    diemToan: toan,
+                    diemVan: van,
+                    diemAnh: anh,
+                    diemTB_HK2: diemTB_HK2.toFixed(2), 
+                    truongNV: tenTruong,
+                    tongDiem: tongDiem.toFixed(2),
+                    diemChuan: diemChuan.toFixed(2),
+                    chenhLech: chenhLech.toFixed(2),
+                    loiKhuyen: loiKhuyen.replace(/<[^>]*>?/gm, ''), 
+                    canhBao: canhBaoText 
+                };
+
+                sendToGoogleSheets(reportData);
+            });
+            
+            // 3. Xử lý sự kiện cho nút "Nhập lại"
+            resetButton.addEventListener('click', () => {
+                form.reset(); 
+                selectTruong.selectedIndex = 0;
+                ketQuaDiv.classList.add('hidden');
+                ketQuaDiv.innerHTML = '';
+                document.getElementById('hoTen').focus(); 
+            });
+
+        });
+    </script>
+</body>
+</html>
